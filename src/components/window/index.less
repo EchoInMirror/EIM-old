@@ -1,0 +1,28 @@
+eim-window {
+  background-color: var(--background-color-midium);
+  position: absolute;
+  border-radius: 2px;
+  overflow: hidden;
+
+  .title {
+    padding: 10px;
+    text-align: center;
+    color: var(--text-color-window-title);
+    font-size: 15px;
+
+    .buttons {
+      margin-left: 8px;
+      float: right;
+      opacity: 0;
+      transition: .2s;
+      
+      &:hover {
+        opacity: 1;
+      }
+
+      button + button {
+        margin-left: 6px;
+      }
+    }
+  }
+}

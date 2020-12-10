@@ -1,0 +1,22 @@
+@import '~material-design-icons-iconfont/dist/material-design-icons.css';
+@import 'styles/custom.css';
+@import 'styles/index.less';
+
+body {
+  margin: 0;
+  overflow: hidden;
+  background-color: var(--background-color-darker);
+}
+
+main {
+  overflow: hidden;
+  position: absolute;
+  top: 80px;
+  bottom: 0;
+  left: 0;
+  right: -10000px;
+}
+
+.text-primary-color {
+  color: var(--color-primary) !important;
+}

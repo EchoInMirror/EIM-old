@@ -1,0 +1,26 @@
+:root {
+  --background-color-dark: #21222C;
+  --background-color-darker: #191A21;
+  --background-color-midium: #282a36;
+  --background-color-light: #343746;
+  --background-color-lighter: #424450;
+
+  --color-primary: #BD93F9;
+  --color-danger: #FF5555;
+  --color-danger-lighter: #FF7777;
+  --color-success: #50FA7B;
+  --color-success-lighter: #79fb9a;
+  --color-hover-background: rgba(255, 255, 255, .1);
+
+  --scrollbar-color: var(--color-primary);
+
+  --text-color-window-title: var(--color-primary);
+  --text-color-secondary: #6272A4;
+
+  --keyboard-white-color: #f2f2f2;
+  --keyboard-black-color: #21222C;
+
+  color: #FFF;
+
+  font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
+}

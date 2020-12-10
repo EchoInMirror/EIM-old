@@ -1,0 +1,142 @@
+#pattern-window {
+  .body {
+    position: relative;
+  }
+
+  .container {
+    display: flex;
+    max-width: 100vw;
+  }
+
+  .instruments {
+    margin: 0;
+    max-width: 300px;
+    padding-inline-start: 20px;
+    list-style-type: none;
+    font-size: 14px;
+    min-width: 180px;
+    overflow: auto hidden;
+    resize: horizontal;
+    z-index: 100;
+    flex-shrink: 0;
+    height: fit-content;
+    padding-bottom: 8px;
+    position: relative;
+
+    span {
+      display: inline-block;
+      padding: 0 5px;
+      outline: none;
+    }
+
+    li {
+      min-height: 60px;
+      position: relative;
+      display: flex;
+      align-items: center;
+    
+      .drag-handle {
+        border-bottom: 1px solid #bdbdbd87;
+        cursor: s-resize;
+        position: absolute;
+        bottom: 0;
+        left: 45px;
+        right: 30px;
+        height: 3px;
+        top: 60px;
+        margin-top: -3px;
+      }
+    }
+
+    .buttons {
+      position: relative;
+      margin-left: auto;
+      right: 35px;
+      opacity: 0;
+      transition: .2s;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+
+  .avatar {
+    transition: .3s;
+    margin-right: 5px;
+    &::after {
+      position: absolute;
+      content: counter(list-item);
+      color: transparent;
+      transition: .3s;
+    }
+    &:hover {
+      color: transparent;
+      
+      &::after {
+        content: counter(list-item);
+        color: #FFF;
+      }
+    }
+  }
+
+  .blocks {
+    overflow: auto;
+    height: 100%;
+    resize: auto;
+    width: 600px;
+    min-height: 240px;
+
+    svg {
+      top: 0;
+      position: absolute;
+    }
+
+    ul {
+      position: relative;
+      margin: 0;
+      list-style-type: none;
+      padding-inline-start: 0;
+      width: 124800px;
+      height: fit-content;
+    }
+
+    li {
+      height: 59px;
+      border-top: 1px solid #bdbdbd60;
+      overflow: hidden;
+      position: relative;
+    }
+
+    li:last-child {
+      border-bottom: 1px solid #bdbdbd60;
+    }
+  }
+
+  eim-keyboard {
+    right: 0;
+    height: inherit;
+    position: absolute;
+    overflow: hidden;
+  }
+
+  .scroll-bar {
+    height: 70px;
+    position: absolute;
+    width: 7px;
+    transition: box-shadow .3s;
+    border-radius: 10px;
+    top: 0;
+    right: 0;
+    background: var(--scrollbar-color);
+    box-shadow: 0 3px 3px -2px rgba(0, 0, 0, 0.2),
+      0 3px 4px 0 rgba(0, 0, 0, 0.14),
+      0 1px 8px 0 rgba(0, 0, 0, 0.12);
+
+    &:hover {
+      box-shadow: 0 4px 5px -2px rgba(0, 0, 0, 0.2),
+        0 7px 10px 1px rgba(0, 0, 0, 0.14),
+        0 2px 16px 1px rgba(0, 0, 0, 0.12);
+    }
+  }
+}
