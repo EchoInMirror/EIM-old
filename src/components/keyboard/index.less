@@ -1,18 +1,37 @@
 .eim-keyboard {
   transform-origin: top;
-  --white-height: 42px;
-  --black-height: 24px;
+  @white-height: 42px;
+  @black-height: 24px;
   .w {
-    height: var(--white-height);
+    height: @white-height;
     width: 30px;
     background-color: var(--keyboard-white-color);
   }
   .b {
     width: 16px;
-    height: var(--black-height);
+    height: @black-height;
     float: left;
-    margin-top: calc(var(--white-height) / -2);
     background-color: var(--keyboard-black-color);
+  }
+
+  .b1 {
+    margin-top: -16px;
+  }
+
+  .b2 {
+    margin-top: -10px;
+  }
+
+  .b3 {
+    margin-top: -2px;
+  }
+
+  .b4 {
+    margin-top: -12px;
+  }
+
+  .b5 {
+    margin-top: -6px;
   }
 
   & > div {

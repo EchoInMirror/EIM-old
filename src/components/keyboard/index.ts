@@ -23,16 +23,16 @@ export default class Keyboard extends HTMLElement {
       const container = document.createElement('div')
       container.append(
         createNoteElement(i++, 'w'),
-        createNoteElement(i++, 'b'),
+        createNoteElement(i++, 'b b1'),
         createNoteElement(i++, 'w'),
-        createNoteElement(i++, 'b'),
+        createNoteElement(i++, 'b b2'),
         createNoteElement(i++, 'w'),
-        createNoteElement(i++, 'b'),
+        createNoteElement(i++, 'b b3'),
         createNoteElement(i++, 'w divider'),
         createNoteElement(i++, 'w'),
-        createNoteElement(i++, 'b'),
+        createNoteElement(i++, 'b b4'),
         createNoteElement(i++, 'w'),
-        createNoteElement(i++, 'b'),
+        createNoteElement(i++, 'b b5'),
         createNoteElement(i++, 'w')
       )
       replace.appendChild(container)

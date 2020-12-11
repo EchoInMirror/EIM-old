@@ -43,26 +43,40 @@ scrollBar.ondrag = e => {
     return
   }
   const r = (2940 * ratioY - body.clientHeight) * (scrollBar.offsetTop / (body.clientHeight - scrollBar.clientHeight))
-  console.log(r)
   isScrollByJs = true
   keyboard.scrollTop = r
   editModeInstrument.patternElement.scrollTop = r
 }
 
+new window.ResizeObserver(([it]) => {
+  if (!editModeInstrument) return
+  resizeY(70 / it.contentRect.height)
+}).observe(scrollBar)
+
+let isFullscreen = false
+
 const fullscreenButton = FULLSCREEN_BUTTON.cloneNode() as HTMLButtonElement
 patternWindow.buttonsElement.insertBefore(fullscreenButton, patternWindow.buttonsElement.firstChild)
 fullscreenButton.onclick = () => {
-  patternWindow.style.left = '0'
-  patternWindow.style.top = '0'
-  blocks.style.height = (MAIN_ELEMENT.offsetHeight - 40) + 'px'
-  blocks.style.width = window.innerWidth + 'px'
-  if (editModeInstrument) setTimeout(() => editModeInstrument && (blocks.scrollTop = editModeInstrument.offsetTop - 40), 20)
+  isFullscreen = !isFullscreen
+  if (isFullscreen) {
+    fullscreenButton.classList.add('sub')
+    patternWindow.style.left = '0'
+    patternWindow.style.top = '0'
+    blocks.style.height = (MAIN_ELEMENT.offsetHeight - 40) + 'px'
+    blocks.style.width = window.innerWidth + 'px'
+    if (editModeInstrument) setTimeout(() => editModeInstrument && (blocks.scrollTop = editModeInstrument.offsetTop), 20)
+  } else {
+    fullscreenButton.classList.remove('sub')
+    blocks.style.height = '500px'
+    blocks.style.width = '600px'
+  }
 }
 
 new window.ResizeObserver(([it]) => {
-  const value = it.contentRect.height + 'px'
-  instruments.style.height = value
+  instruments.style.height = it.contentRect.height + 'px'
 }).observe(blocks)
+
 blocks.onscroll = () => {
   instruments.scrollTop = blocks.scrollTop
 }
@@ -82,14 +96,13 @@ instruments.ondrag = e => {
   if (!editModeInstrument) parent.notesElement.style.transform = `scaleY(${parent.clientHeight / 2940})`
 }
 
-const observer = new window.ResizeObserver(([it]) => {
-  const value = it.contentRect.height + 'px'
+new window.ResizeObserver(([it]) => {
   if (!editModeInstrument) return
+  const value = it.contentRect.height + 'px'
   editModeInstrument.dragHandleElement.style.top = value
   editModeInstrument.patternElement.style.height = value
   editModeInstrument.style.height = value
-})
-observer.observe(blocks)
+}).observe(blocks)
 
 export const editMode = (instrument: InstrumentElement) => {
   if (editModeInstrument === instrument) {
@@ -125,12 +138,7 @@ export const editMode = (instrument: InstrumentElement) => {
       isScrollByJs = false
       return
     }
-    if (instrument.patternElement.scrollTop / instrument.patternElement.clientHeight * ratioY > 1) {
-      e.stopPropagation()
-      return
-    }
-    const top = instrument.patternElement.scrollTop / instrument.patternElement.clientHeight * ratioY * (body.clientHeight - scrollBar.clientHeight - 7)
-    scrollBar.style.top = top + 'px'
+    scrollBar.style.top = (instrument.patternElement.scrollTop / 2940 / ratioY * body.clientHeight) + 'px'
     keyboard.scrollTop = instrument.patternElement.scrollTop
   }
 }
