@@ -1,3 +1,5 @@
+@import '../../styles/shadows.less';
+
 #pattern-window {
   .body {
     position: relative;
@@ -99,13 +101,35 @@
       padding-inline-start: 0;
       width: 124800px;
       height: fit-content;
+      transform-origin: left;
+      transform: translateZ(0);
     }
 
     li {
       height: 59px;
       border-top: 1px solid #bdbdbd60;
-      overflow: hidden;
+      overflow: hidden scroll;
       position: relative;
+      transform-origin: left;
+      transform: scaleX(0.1);
+
+      svg {
+        transform-origin: top;
+      }
+
+      & > div {
+        height: 2940px;
+        width: 100%;
+        position: absolute;
+        transform-origin: top;
+
+        & > div {
+          height: 24.5px;
+          position: absolute;
+          background-color: var(--keyboard-note-color);
+          border-radius: 6px;
+        }
+      }
     }
 
     li:last-child {
@@ -113,7 +137,7 @@
     }
   }
 
-  eim-keyboard {
+  .keyboard {
     right: 0;
     height: inherit;
     position: absolute;

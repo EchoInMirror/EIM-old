@@ -24,6 +24,7 @@ module.exports = {
   devServer: {
     hot: true
   },
+  target: 'electron-renderer',
   plugins: plugins,
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css']

@@ -16,6 +16,9 @@ export default class Keyboard extends HTMLElement {
     super()
     let all = +this.getAttribute('octave-count')! || 10
     let i = 0
+    const replace = document.createElement('div')
+    replace.className = 'eim-keyboard'
+    this.classList.forEach(it => replace.classList.add(it))
     while (all-- > 0) {
       const container = document.createElement('div')
       container.append(
@@ -32,8 +35,9 @@ export default class Keyboard extends HTMLElement {
         createNoteElement(i++, 'b'),
         createNoteElement(i++, 'w')
       )
-      this.appendChild(container)
+      replace.appendChild(container)
     }
+    this.replaceWith(replace)
   }
 }
 

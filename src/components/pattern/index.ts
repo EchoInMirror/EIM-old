@@ -1,13 +1,17 @@
 import './index.less'
 import '../../global'
 import Window, { FULLSCREEN_BUTTON, MAIN_ELEMENT } from '../window'
-import Keyboard from '../keyboard'
+import { promises as fs } from 'fs'
+import { parseArrayBuffer } from 'midi-json-parser'
 
 export type InstrumentElement = HTMLLIElement & {
   patternElement: HTMLLIElement
   editButtonElement: HTMLButtonElement
   dragHandleElement: HTMLDivElement
+  notesElement: HTMLDivElement
 }
+
+const gridY = document.importNode(document.getElementById('template-grid-y') as HTMLTemplateElement, true).content.firstElementChild as SVGElement
 
 let editModeInstrument: InstrumentElement | null = null
 
@@ -16,17 +20,33 @@ const body = patternWindow.querySelector('.body')! as HTMLDivElement
 const instruments = body.querySelector('.instruments')! as HTMLOListElement
 const patterns = body.querySelector('.patterns')! as HTMLUListElement
 const blocks = body.querySelector('.blocks')! as HTMLUListElement
-const keyboard = patternWindow.querySelector('eim-keyboard')! as Keyboard
+const keyboard = patternWindow.querySelector('.keyboard')! as HTMLDivElement
+const eimKeyboard = keyboard.firstChild! as HTMLDivElement
 const scrollBar = patternWindow.querySelector('.scroll-bar')! as HTMLDivElement
+
+let ratioY = 1
+
+const resizeY = (it: number) => {
+  if (it > 1) return
+  ratioY = it
+  const t = `scaleY(${it})`
+  eimKeyboard.style.transform = t
+  gridY.style.transform = t
+  if (editModeInstrument) editModeInstrument.notesElement.style.transform = t
+}
+
+let isScrollByJs = false
 
 scrollBar.ondrag = e => {
   if (!editModeInstrument || body.clientHeight <= e.clientY - (scrollBar as any).startY + scrollBar.clientHeight + 10) {
     e.stopPropagation()
     return
   }
-  const r = scrollBar.offsetTop / body.clientHeight
-  keyboard.scrollTop = keyboard.clientHeight * r
-  editModeInstrument.patternElement.scrollTop = keyboard.clientHeight * r
+  const r = (2940 * ratioY - body.clientHeight) * (scrollBar.offsetTop / (body.clientHeight - scrollBar.clientHeight))
+  console.log(r)
+  isScrollByJs = true
+  keyboard.scrollTop = r
+  editModeInstrument.patternElement.scrollTop = r
 }
 
 const fullscreenButton = FULLSCREEN_BUTTON.cloneNode() as HTMLButtonElement
@@ -59,6 +79,7 @@ instruments.ondrag = e => {
   }
   parent.style.height = value + 'px'
   parent.patternElement.style.height = value + 'px'
+  if (!editModeInstrument) parent.notesElement.style.transform = `scaleY(${parent.clientHeight / 2940})`
 }
 
 const observer = new window.ResizeObserver(([it]) => {
@@ -80,6 +101,9 @@ export const editMode = (instrument: InstrumentElement) => {
     instrument.style.height = '60px'
     scrollBar.style.display = 'none'
     keyboard.style.display = 'none'
+    instrument.notesElement.style.transform = `scaleY(${instrument.clientHeight / 2940})`
+    instrument.patternElement.onscroll = null
+    gridY.remove()
     return
   }
   instrument.editButtonElement.classList.add('text-primary-color')
@@ -88,15 +112,27 @@ export const editMode = (instrument: InstrumentElement) => {
   instrument.dragHandleElement.style.top = value
   instrument.patternElement.style.height = value
   instrument.style.height = value
-  instrument.patternElement.innerHTML += `<svg width="100%" height="3250">
-  <rect fill="url(#editor-grid-y)" x="0" y="0" width="2496000" height="3240" />
-</svg>`
+  instrument.notesElement.style.transform = `scaleY(${ratioY})`
+  instrument.patternElement.insertBefore(gridY, instrument.notesElement)
   blocks.scrollTop = instrument.offsetTop
   blocks.style.overflowY = 'hidden'
   keyboard.style.top = instrument.offsetTop + 'px'
   keyboard.style.display = ''
   scrollBar.style.display = ''
   editModeInstrument = instrument
+  instrument.patternElement.onscroll = e => {
+    if (isScrollByJs) {
+      isScrollByJs = false
+      return
+    }
+    if (instrument.patternElement.scrollTop / instrument.patternElement.clientHeight * ratioY > 1) {
+      e.stopPropagation()
+      return
+    }
+    const top = instrument.patternElement.scrollTop / instrument.patternElement.clientHeight * ratioY * (body.clientHeight - scrollBar.clientHeight - 7)
+    scrollBar.style.top = top + 'px'
+    keyboard.scrollTop = instrument.patternElement.scrollTop
+  }
 }
 
 instruments.onclick = e => {
@@ -116,6 +152,8 @@ export const addInstrument = (name: string) => {
   </div>
   <div class="drag-handle" draggable="true" data-disable-x="true"></div>`
   li.patternElement = document.createElement('li')
+  li.notesElement = document.createElement('div')
+  li.patternElement.appendChild(li.notesElement)
   li.editButtonElement = li.querySelector('[data-button-function=edit]') as HTMLButtonElement
   li.dragHandleElement = li.lastElementChild as HTMLDivElement
   instruments.appendChild(li)
@@ -123,9 +161,45 @@ export const addInstrument = (name: string) => {
   return li
 }
 
+type Note = [number, number, number, number]
+
 addInstrument('钢琴')
 addInstrument('钢琴')
 const elm = addInstrument('钢琴')
 addInstrument('钢琴')
 addInstrument('钢琴')
-setTimeout(editMode, 200, elm)
+setTimeout((it: InstrumentElement) => {
+  editMode(it)
+  resizeY(0.5)
+  fs.readFile('C:\\Users\\Shirasawa\\Desktop\\GGGG.mid').then(it => parseArrayBuffer(it.buffer)).then(data => {
+    const track = data.tracks[1]
+    if (!track) return
+    let time = 0
+    const noteMap: Record<number, number | null> = { }
+    const notes: Note[] = []
+    track.forEach(n => {
+      time += n.delta
+      if (n.noteOn) {
+        // eslint-disable-next-line no-undef
+        const note = n as import('midi-json-parser-worker').IMidiNoteOnEvent
+        if (noteMap[note.noteOn.noteNumber] != null) return
+        noteMap[note.noteOn.noteNumber] = notes.push([time, time, note.noteOn.noteNumber, note.noteOn.velocity]) - 1
+      } else if (n.noteOff) {
+        // eslint-disable-next-line no-undef
+        const note = n as import('midi-json-parser-worker').IMidiNoteOffEvent
+        const id = noteMap[note.noteOff.noteNumber]
+        if (id == null) return
+        notes[id][1] = time
+        noteMap[note.noteOff.noteNumber] = null
+      }
+    })
+    notes.forEach(([start, end, id, velocity]) => {
+      const note = document.createElement('div')
+      note.style.left = start + 'px'
+      note.style.width = (end - start) + 'px'
+      note.style.bottom = (id * 24.5) + 'px'
+      note.style.filter = `brightness(${0.3 + velocity / 127 * 0.7})`
+      elm.notesElement.appendChild(note)
+    })
+  })
+}, 200, elm)

@@ -98,6 +98,6 @@
     "babel-loader": "^8.2.2",
     "electron-squirrel-startup": "^1.0.0",
     "material-design-icons-iconfont": "^6.1.0",
-    "midi-file-io": "^3.0.1"
+    "midi-json-parser": "^8.0.17"
   }
 }
