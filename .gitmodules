@@ -1,0 +1,9 @@
+[submodule "juce-cmake"]
+	path = juce-cmake
+	url = https://github.com/remymuller/juce-cmake.git
+[submodule "JUCE"]
+	path = JUCE
+	url = https://github.com/juce-framework/JUCE.git
+[submodule "vst3sdk"]
+	path = vst3sdk
+	url = https://github.com/steinbergmedia/vst3sdk.git

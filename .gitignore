@@ -91,3 +91,4 @@ out/
 *.node
 native/target
 native/artifacts.json
+build

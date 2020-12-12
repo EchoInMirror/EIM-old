@@ -3,6 +3,26 @@ header {
   top: 0;
   left: 0;
   right: 0;
-  padding: 40px;
+  padding: 25px;
   z-index: 1100;
+  display: flex;
+  justify-content: space-between;
+
+  & > div {
+    flex: 1;
+  }
+
+  .buttons-group {
+    height: 38px;
+
+    &.center {
+      display: flex;
+      justify-content: center;
+    }
+  }
+
+  sub {
+    font-size: 0.5rem;
+    margin-top: 6px;
+  }
 }

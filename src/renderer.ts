@@ -1,4 +1,4 @@
 import './index.css'
-import './components'
-
 import './utils'
+import './EIM'
+import './components'
