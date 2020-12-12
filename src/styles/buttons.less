@@ -90,23 +90,41 @@ button.md.circle {
     font-size: 1rem;
   }
 
+  &.mid {
+    padding: 0.3rem;
+    font-size: 1.4rem;
+  }
+
   i {
     pointer-events: none;
     font-size: inherit;
   }
 
-  &::after {
-    content: ' ';
+  .wave {
     position: absolute;
-    top: 50%; bottom: 50%; left: 50%; right: 50%;
-    transition: 100ms cubic-bezier(0.4, 0, 0.2, 1);
     background-color: var(--color-primary);
-    z-index: -1;
     opacity: .2;
     border-radius: 50%;
-  }
-
-  &:active::after {
-    top: 0; bottom: 0; left: 0; right: 0;
+    height: 0;
+    width: 0;
+    transform: translate3d(-50%, -50%, 0) scale(1);
   }
 }
+
+button.md.primary {
+  background-color: var(--color-primary);
+
+  .wave {
+    background-color: #FFF !important;
+  }
+}
+
+button.md.secondary {
+  color: #000;
+  background-color: var(--color-secondary);
+
+  .wave {
+    background-color: #FFF !important;
+  }
+}
+

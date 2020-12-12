@@ -1,0 +1,32 @@
+.md.fab-buttons {
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  height: 54px;
+  width: 54px;
+  flex-direction: column;
+  justify-content: flex-end;
+  display: flex;
+  overflow: hidden;
+  align-items: center;
+
+  button {
+    flex: unset;
+    flex-shrink: 0;
+    &:not([class*=primary]) {
+      transform: scale(0);
+    }
+    transition: transform .2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  button + button {
+    margin-top: 14px;
+  }
+
+  &:hover {
+    height: auto;
+    button:not([class*=primary]) {
+      transform: scale(1);
+    }
+  }
+}

@@ -6,6 +6,7 @@
   --background-color-lighter: #424450;
 
   --color-primary: #BD93F9;
+  --color-secondary: #8BE9FD;
   --color-danger: #FF5555;
   --color-danger-lighter: #FF7777;
   --color-success: #50FA7B;
@@ -19,7 +20,7 @@
 
   --keyboard-white-color: #f2f2f2;
   --keyboard-black-color: #21222C;
-  --keyboard-note-color: #8BE9FD;
+  --keyboard-note-color: var(--color-secondary);
   --keyboard-note-shadow-color: #8BE9FD2A;
 
   color: #FFF;
